@@ -32,6 +32,7 @@ async function GetUserInformation(){
     try{
       card.innerHTML = "loading...";
     onAuthStateChanged(auth, async (user) => {
+      if(!auth.currentUser)card.innerHTML = "no user";
     const userCollection = collection(db,"users");
     const userDocRef = doc(userCollection,user.uid);
   let NestedData = await GetNestedCollections(userDocRef,user.uid);
