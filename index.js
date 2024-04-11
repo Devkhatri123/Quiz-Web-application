@@ -260,7 +260,7 @@ document.addEventListener(("DOMContentLoaded"),()=>{
    timer = setInterval(() => {
     time--;
     hr.innerHTML = time;
-   if(time<=0) time = 90; 
+   if(time<=0) time=90; 
  
 },1000)
     
@@ -295,7 +295,7 @@ async function Inc(data, button, Data) {
     ];
     const Data = DATA;
 
-    addNewCategoryToDocument(user.uid, Data, categoryName, index);
+    addNewCategoryToDocument(user.uid, Data, categoryName, index,data);
 
   });
   console.log(data);
@@ -313,7 +313,6 @@ let documentId = auth.currentUser.uid
     );
     const customDocumentRef = doc(nestedCollectionRef, Id);
     TimeTaken = 90-time;
-    console.log(TimeTaken)
     clearInterval(timer)
     await setDoc(customDocumentRef,{TimeTaken:TimeTaken},{merge:true});
     DisplayResult(att, Data);
@@ -324,9 +323,12 @@ async function addNewCategoryToDocument(
   documentId,
   newCategory,
   categoryName,
-  Index
+  Index,
+  CurrentQuestion
 ) {
+ 
   try {
+    console.log(newCategory)
     // Construct the document reference
     const userDocRef = doc(db, "users", documentId);
     const nestedCollectionRef = collection(
@@ -356,18 +358,18 @@ async function addNewCategoryToDocument(
       }
 
       if (foundQIndex !== -1) {
-        // Update existing question
         currentData[foundQIndex] = [{ ...newCategory }];
         await setDoc(
           customDocumentRef,
           { [categoryName]: currentData[categoryName] },
-          // {score:score},
           { merge: true }
         );
         console.log("Question updated successfully");
       } else {
-        // Add new category
-        score += 1;
+        if(newCategory[0].attemptmeted== CurrentQuestion.correct_answer){
+         score += 1;
+          }
+     
         const currentCategory = currentData[categoryName] || [];
         const mergedCategory = [...currentCategory, ...newCategory];
         await setDoc(
@@ -378,25 +380,21 @@ async function addNewCategoryToDocument(
         console.log("New category added successfully.");
       }
     } else {
-      score += 1;
-   
-     let array1 = [];
+      if(newCategory[0].attemptmeted== CurrentQuestion.correct_answer){
+         score += 1;
+        }
     console.log("score : " + score);
     }
   } catch (error) {
     console.error("Error adding new category:", error);
   }
 }
-
-
-
 const buttons = document.querySelectorAll(".a");
 buttons.forEach((button) => {
   button.addEventListener("click",()=>{
     GetTag(button)
     console.log(button)
   });
-       
 });
 
 

@@ -40,7 +40,7 @@
         const userData = [
             { name: "User1", timeTaken: 25 },
             { name: "User2", timeTaken: 30 },
-            { name: "User3", timeTaken: 90 },
+            { name: "User3", timeTaken: 660 },
             { name: "User4", timeTaken: 35 },
             { name: "User5", timeTaken: 15 }
         ];
@@ -68,7 +68,7 @@
             const minutes = Math.floor((timeInSeconds % 3600) / 60);
             const seconds = Math.floor(timeInSeconds % 60);
 
-            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
      
     </script>
