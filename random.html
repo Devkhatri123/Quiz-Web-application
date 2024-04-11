@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <style>
+        /* Some basic styling for the leaderboard */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Leaderboard</h1>
+    <table id="leaderboard">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>User</th>
+                <th>Time Taken</th>
+            </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+            <!-- Leaderboard data will be displayed here -->
+        </tbody>
+    </table>
+
+    <script>
+        // Sample user data (replace this with your actual data)
+        const userData = [
+            { name: "User1", timeTaken: 25 },
+            { name: "User2", timeTaken: 30 },
+            { name: "User3", timeTaken: 90 },
+            { name: "User4", timeTaken: 35 },
+            { name: "User5", timeTaken: 15 }
+        ];
+
+        // Sort the user data based on time taken
+        userData.sort((a, b) => a.timeTaken - b.timeTaken);
+
+        // Display the leaderboard
+        const leaderboardBody = document.getElementById("leaderboardBody");
+        const leaderboard = document.getElementById("leaderboard");
+
+        userData.forEach((user, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${user.name}</td>
+                <td>${formatTime(user.timeTaken)}</td>
+            `;
+            leaderboardBody.appendChild(row);
+        });
+
+        // Function to format time as HH:MM:SS
+        function formatTime(timeInSeconds) {
+            const hours = Math.floor(timeInSeconds / 3600);
+            const minutes = Math.floor((timeInSeconds % 3600) / 60);
+            const seconds = Math.floor(timeInSeconds % 60);
+
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+     
+    </script>
+</body>
+</html>

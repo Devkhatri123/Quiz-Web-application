@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Dosis">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="index.css">
+    <title>Quiz Web app</title>
+</head>
+
+<body>
+    <header id="one">
+        <div class="stars_cont">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div id="stars3"></div>
+        <nav>
+            <img src="QuizApi_Logo_White.png" alt="Quiz_logo" id="logo" />
+            <div>
+                <ul>
+                    <li><a href="LeaderBoard.html" class="leaderboard">LeaderBoard</a></li>
+                    <li><a href="#" class="emaildisplay">Login</a></li>
+                </ul>
+                <div id="users_options">
+                 <a href="#" class="my_quiz">My Quizes</a>
+                 <a href="#" class="logout">Logout</a>
+                </div>
+            </div>
+        </nav>
+        <div class="header_text">
+            <div>
+                <h1>The QuizAPI includes a wide number of <span class="auto_type"></span> questions</h1>
+                <p>Test your knowledge or easily embed a quiz on your website with the Quiz API</p>
+            </div>
+            <div class="img_cont">
+                <img src="laptop-quizapi.png" alt="laptop" id="laptop">
+            </div>
+        </div>
+    </div>
+    </header>
+    <section id="second">
+        <div class="section_header">
+            <h2>Our Top Topics</h2>
+            <p id="para">Test your skills with our top topics with a variaty of questions set for beginners and seniors
+                alike!</p>
+        </div>
+        <div class="questions_cont">
+            <a id="a" class="a" data-value="Sports" data-questions="10" data-number="21">
+        <div class="PHP_cont" id="topic">
+            <p class="icon"><i class="fa-brands fa-php"></i></p>
+            <h5>PHP</h5>
+            <small>10 Questions</small>
+        </div>
+    </a>
+        <a href="#" id="a1" class="a" data-value="Celebrities" data-questions="10" data-number="26">
+        <div class="LINUX_cont" id="topic">
+           
+            <p class="icon"><i class="fa-brands fa-php"></i></p>
+            <h5>PHP</h5>
+            <small>10 Questions</small>
+        </div>
+        </a>
+        <a href="#" id="a2" class="a" data-value="HTML" data-questions="10" data-number="23">
+        <div class="HTML_cont" id="topic">
+            <p class="icon"><i class="fa-brands fa-php"></i></p>
+            <h5>PHP</h5>
+            <small>10 Questions</small>
+        </div>
+    </a>
+    <a href="#" id="a" class="a"  data-value="BASH" data-questions="10" data-number="9">
+        <div class="PHP_cont" id="topic">
+            <p class="icon"><i class="fa-brands fa-php"></i></p>
+            <h5>PHP</h5>
+            <small>10 Questions</small>
+        </div>
+    </a>
+    <a href="#" id="a" class="a"  data-value="Docker" data-questions="10" data-number="10">
+        <div class="PHP_cont" id="topic">
+            <p class="icon"><i class="fa-brands fa-php"></i></p>
+            <h5>PHP</h5>
+            <small>10 Questions</small>
+        </div>
+    </a>
+    <a href="#" id="a" class="a"  data-value="WordPress" data-questions="10" data-number="20">
+        <div class="PHP_cont" id="topic">
+            <p class="icon"><i class="fa-brands fa-php"></i></p>
+            <h5>PHP</h5>
+            <small>10 Questions</small>
+        </div>
+    </a>
+    <a href="#" id="a" class="a"  data-value="Laravel" data-questions="10" data-number="19">
+        <div class="PHP_cont" id="topic">
+            <p class="icon"><i class="fa-brands fa-php"></i></p>
+            <h5>PHP</h5>
+            <small>10 Questions</small>
+        </div>
+    </a>
+    <a href="#" id="a" class="a"  data-value="DevOps" data-questions="10" data-number="24">
+        <div class="PHP_cont" id="topic">
+            <p class="icon"><i class="fa-brands fa-php"></i></p>
+            <h5>PHP</h5>
+            <small>10 Questions</small>
+        </div>
+    </a>
+    </div>
+    </section>
+    <script src="user.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js"></script>
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script>
+        var typed = new Typed(".auto_type", {
+            strings: ["DevOps", "Linux", "HTML", "PHP", "JAVASCRIPT"],
+            typeSpeed: 150,
+            backSpeed: 150,
+            looped: true
+        });
+    </script>
+     <!-- <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js" type="module"></script> -->
+    <script  src="firebase.js"  type="module"></script>
+    <script  src="index.js" type="module"></script>
+    <!-- <script src="firebase.js" type="module"></script> -->
+</body>
+
+</html>
