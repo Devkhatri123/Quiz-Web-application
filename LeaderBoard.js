@@ -19,9 +19,9 @@ import {
 } from "./firebase.js";
 let option = document.getElementById("select");
 let tbody = document.getElementById("tbody");
-let value = option.value;
-let Arra = []; // Declare array outside the function for proper accumulation
-
+let value = option.value; 
+let Arra = [];// Declare array outside the function for proper accumulation
+// const tbody = document.getElementById("tbody"); 
 async function GetAllUsersQuizInfo() {
   let UsersCollection = collection(db, "users");
   const UsersDocs = await getDocs(UsersCollection);
@@ -37,24 +37,28 @@ async function GetAllUsersQuizInfo() {
       if (QuizDocInfo.exists()) {
         const data = QuizDocInfo.data();
         Arra.push(data);
+        if(Arra.length>1){
+        console.log(Arra)
+         Arra.sort((a, b) => a.TimeTaken - b.TimeTaken);
+        Arra.map((val, index) => {
+          tbody.innerHTML +=`
+            <tr>
+              <td id="winner">${index + 1}</td>
+              <td><p> ${val.name}</p></td>
+              <td>${val.score}</td>
+              <td>${val.TimeTaken}</td>
+            </tr>
+          `;
+        });
+        }
       }
     });
 
     // Move tbody reference outside the loop for efficiency
-    const tbody = document.getElementById("tbody"); // Adjust selector if needed
+    // Adjust selector if needed
 
-    Arra.sort((a, b) => a.TimeTaken - b.TimeTaken);
-    Arra.forEach((val, index) => {
-      tbody.innerHTML +=`
-        <tr>
-          <td id="winner">${index + 1}</td>
-          <td><p> ${val.name}</p></td>
-          <td>${val.score}</td>
-          <td>${val.TimeTaken}</td>
-        </tr>
-      `;
-    });
-    console.log(Arra)
+   
+    console.log(Arra.length)
   } catch (error) {
     // Handle errors gracefully
     console.error(error); // Log the error for debugging
