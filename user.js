@@ -40,6 +40,7 @@ async function GetUserInformation(){
   PrintData(NestedData);
     })
 }catch(error){
+  card.innerHTML = error;
     console.log(error);
 }
 }
