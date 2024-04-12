@@ -39,7 +39,7 @@ async function GetAllUsersQuizInfo(Value) {
    await Promise.all(Promises);
    tbody.innerHTML ="";
    if(Arra.length>0){
-    console.log(Math.floor(Arra[1].TimeTaken%3600)/60);
+   // console.log(Math.floor(Arra[1].TimeTaken%3600)/60);
      Arra.sort((a, b) => a.TimeTaken - b.TimeTaken);
      Arra.sort((a, b) => b.score - a.score);
    Arra.forEach((val, index) => {

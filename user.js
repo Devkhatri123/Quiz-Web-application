@@ -41,8 +41,10 @@ async function GetUserInformation(){
   PrintData(NestedData);
     })
 }catch(error){
+  if(card){
   card.innerText = error;
     console.log(error);
+  }
 }
 }
  GetUserInformation()
@@ -77,6 +79,7 @@ async function GetNestedCollections(DocRef,id){
         <div class="info">
         <h3>Quiz : ${data.Quiz}</h3>
         <p class="No_of_Question">No of Question : ${parseInt(data.NumberofQuestion)}</p>
+        <div><button>View</button></div>
         </div>
        `
        }

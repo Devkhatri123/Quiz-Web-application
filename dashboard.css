@@ -2,9 +2,7 @@ body{
     margin: 0;
 }
 #logo{
-    width: 22%;
-    max-width: 300px;
-    min-width: 16%;
+    max-width: 139px;
 }
 nav{
     display: flex;
@@ -27,6 +25,16 @@ li a{
     text-decoration: none;
     font-family: "Poppins";
 }
+button{
+    width: 50%;
+    text-align: center;
+    padding: 12px;
+}
+.info div{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
 #users_options{
     display: flex;
     gap: 15px;
@@ -39,7 +47,7 @@ li a{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(25%, 1fr));
     grid-gap: 20px;
-    width: 80%;
+    width: 84%;
     margin: 0 auto;
 }
 .Quizes{

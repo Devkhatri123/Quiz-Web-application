@@ -599,9 +599,16 @@ li{
     list-style: none;
     color: white;
 }
-li a{
-    color: white;
+ a{
+    border-bottom: 1px solid;
+    font-size: 15px;
+    color: black;
     text-decoration: none;
+    font-weight: 400;
+    color: #6d6d6d;
+    text-align: center;
+    padding: 18px;
+    clear: both;
 }
 ul{
     display: flex;
@@ -771,27 +778,49 @@ li{
     /* display: flex; */
     flex-direction: column;
     gap: 0px;
-    margin-top: 10px;
+    /* margin-top: 10px; */
     background: white;
     /* padding: 11px; */
     max-width: 200px;
     padding: 3px 0px;
-    width: 110px;
-    /* position: absolute;
-    right: 13px; */
+    /* width: 110px; */
+    position: absolute;
+    right: 4px;
+    top: 52px;
+
 }
-.my_quiz{
+/* .my_quiz{
     color: black;
     text-decoration: none;
     text-align: center;
     border-bottom: 1px solid;
-    /* width: 96px; */
-    /* margin-left: 5px; */
     margin: 0 3px;
-}
-.logout{
+} */
+/* .logout{
     color: black;
     text-decoration: none;
     text-align: center;
     padding-top: 1px;
+} */
+@media screen and (min-width : 639px) {
+    #menu{
+        display: none;
+    }
+    #users_options{
+        display: flex;
+        flex-direction: row;
+        background: none;
+        color: white;
+        position: unset;
+        max-width: unset;
+        gap: 1.5vw;
+    }
+    a{
+        color: white;
+        border: none;
+        padding: 0;
+    }
+    img{
+        z-index: unset;
+    }
 }

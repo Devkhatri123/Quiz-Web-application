@@ -7,6 +7,7 @@ let login_btn = document.getElementsByClassName("login_btn")[0];
 let emaildisplay = document.getElementsByClassName("emaildisplay")[0];
 let users_options = document.getElementById("users_options");
 let main = document.querySelectorAll(".a");
+let menu = document.getElementById("menu");
 import {
   app,
   db,
@@ -74,7 +75,7 @@ async function GetTag(button) {
         email: user.email,
         score: score,
         NumberOfAttempts: NumberOfAttempts,
-        Quiz:att,
+        Quiz: att,
       };
 
       if (!docSnapshot.exists()) {
@@ -92,7 +93,7 @@ async function GetTag(button) {
           { merge: true }
         );
       }
-        window.location.href = `phpQuestion.html?category=${number}&att=${att}`;
+      window.location.href = `phpQuestion.html?category=${number}&att=${att}`;
     }
   } catch (error) {
     console.error("Error:", error);
@@ -143,14 +144,14 @@ onAuthStateChanged(auth, (user) => {
     console.log("User is signed in:", user.email, user.uid);
 
     if (emaildisplay) emaildisplay.textContent = user.displayName;
-    emaildisplay.addEventListener("click",()=>{
-      if(users_options.style.display =="none"){
-      users_options.style.display = "flex";
-      console.log(users_options)
-      }
-    else  users_options.style.display = "none";
-    })
-
+    if(menu){
+    menu.addEventListener("click", () => {
+      if (users_options.style.display == "none") {
+        users_options.style.display = "flex";
+        console.log(users_options);
+      } else users_options.style.display = "none";
+    });
+  }
     redirected = true;
   }
 });
@@ -178,71 +179,85 @@ async function getQuizQuestions(category) {
 const myApiKey = "IFzSbBbmq4QpXOxmYllcHYGSi6q4OE06uKSMzTou";
 var NewPos;
 var Temp;
-var time = 90; 
+var time = 90;
 async function GetData() {
- let url= new URLSearchParams(window.location.search);
- let category = url.get("category");
- console.log(category)
+  let url = new URLSearchParams(window.location.search);
+  let category = url.get("category");
+  console.log(category);
   try {
     const data = await getQuizQuestions(category);
     if (data) {
-      
       console.log("Retrieved questions:", data);
-      let Array = [data.results[index].correct_answer,...data.results[index].incorrect_answers];
-      for(let i = Array.length - 1; i>0;i--){
-         NewPos = Math.floor(Math.random() * (i+1));
-        [Array[i],Array[NewPos]] = [Array[NewPos],Array[i]];
-      }
-     console.log(Array)
-      quiz.innerHTML = `
+      if (data.results.length > 0) {
+        let Array = [
+          data.results[index].correct_answer,
+          ...data.results[index].incorrect_answers,
+        ];
+        for (let i = Array.length - 1; i > 0; i--) {
+          NewPos = Math.floor(Math.random() * (i + 1));
+          [Array[i], Array[NewPos]] = [Array[NewPos], Array[i]];
+        }
+        console.log(Array);
+
+        quiz.innerHTML = `
                 <div class="quiz_top">
                     <h1>${data.results[index].category} Questions</h1>
                     <p>Time Left : <span id="hr">${time}</span></p>
                 </div>
                 <div class="question">
                     <h3><span>${index + 1}.</span>${
-        data.results[index].question
-      }</h3>
+          data.results[index].question
+        }</h3>
                     <div class="answer_buttons">
-                        <button class="option1" id="btn" value="${
-                         Array[0]
-                        }">${Array[0]}</button> 
-                        <button class="option1" id="btn" value="${
-                          Array[3]
-                        }">${Array[3]}</button> 
-                        <button class="option1" id="btn" value="${
-                          Array[2]
-                        }">${Array[2]}</button> 
-                        <button class="option1" id="btn" value="${
-                          Array[1]
-                        }">${Array[1]}</button>
+                        <button class="option1" id="btn" value="${Array[0]}">${
+          Array[0]
+        }</button> 
+                        <button class="option1" id="btn" value="${Array[3]}">${
+          Array[3]
+        }</button> 
+                        <button class="option1" id="btn" value="${Array[2]}">${
+          Array[2]
+        }</button> 
+                        <button class="option1" id="btn" value="${Array[1]}">${
+          Array[1]
+        }</button>
                     </div>
                 </div>
                 <div class="quiz_footer">
                     <p><span>${index + 1}</span> of <span>${
-        data.results.length
-      }</span> Questions</p>
+          data.results.length
+        }</span> Questions</p>
                     <button class="next_btn" id="next" value="clicked">Next</button>
                 </div>
                 `;
-                var time = 90;      
-     var hr = document.getElementById("hr")
-      let btn = document.querySelectorAll("#btn");
-    
-    
-      const nextButton = document.getElementById("next");
-      var clickedButtonValue;
-      btn.forEach((button) => {
-        button.addEventListener("click", (event) => {
-          clickedButtonValue = event.target.value;
-          
+
+        var hr = document.getElementById("hr");
+        let btn = document.querySelectorAll("#btn");
+        if (hr) {
+          timer = setInterval(() => {
+            time-=1;
+            hr.innerHTML = time;
+            if(time<=0){
+              console.log("Timesup");
+              DisplayResult(category)
+              clearInterval(timer)
+            }
+          }, 1000);
+        }
+        const nextButton = document.getElementById("next");
+        var clickedButtonValue;
+        btn.forEach((button) => {
+          button.addEventListener("click", (event) => {
+            clickedButtonValue = event.target.value;
+          });
         });
-      });
-      nextButton.addEventListener("click", () => {
-        //console.log(btn)
-        Inc(data.results[index], clickedButtonValue, data);
-        console.log(clickedButtonValue);
-      });
+        nextButton.addEventListener("click", () => {
+          Inc(data.results[index], clickedButtonValue, data);
+          console.log(clickedButtonValue);
+          clearInterval(timer);
+          console.log(time)
+        });
+      }
     } else {
       console.error("Element with ID 'next' not found.");
     }
@@ -250,25 +265,23 @@ async function GetData() {
     console.error("Error:", error);
   }
 }
- //let hr = document.getElementById("hr");
-var currentPageUrl = window.location.href;
-if(currentPageUrl == "http://localhost:5500/" ||currentPageUrl == "http://localhost:5500/#")
-console.log(currentPageUrl);
-document.addEventListener(("DOMContentLoaded"),()=>{
+var hr = document.getElementById("hr");
+document.addEventListener("DOMContentLoaded", () => {
+  console.log(hr);
   GetData();
-  try{
-   timer = setInterval(() => {
-    time--;
-    hr.innerHTML = time;
-   if(time<=0) time=90; 
- 
-},1000)
-    
-}catch(err){
-  console.log(err)
-}
-})
-let TimeTaken; 
+  try {
+    //   if(hr){
+    //  timer = setInterval(() => {
+    //   time--;
+    //   hr.innerHTML = time;
+    //  if(time<=0) time=90;
+    // },1000)
+    //  }
+  } catch (err) {
+    console.log(err);
+  }
+});
+let TimeTaken;
 async function Inc(data, button, Data) {
   console.log(Data.results.length);
 
@@ -279,10 +292,10 @@ async function Inc(data, button, Data) {
   let categoryName = url.get("att");
   onAuthStateChanged(auth, (user) => {
     console.log(user);
-   
+
     const userCollectionRef = collection(db, "users");
     const userDocRef = doc(userCollectionRef, user.uid);
-   
+
     let DATA = [
       {
         question: data.question,
@@ -295,16 +308,15 @@ async function Inc(data, button, Data) {
     ];
     const Data = DATA;
 
-    addNewCategoryToDocument(user.uid, Data, categoryName, index,data);
-
+    addNewCategoryToDocument(user.uid, Data, categoryName, index, data);
   });
   console.log(data);
   console.log("button-value : " + button);
-let documentId = auth.currentUser.uid
+  let documentId = auth.currentUser.uid;
   if (index < Data.results.length) {
     GetData();
   } else {
-    const Id = auth.currentUser.uid
+    const Id = auth.currentUser.uid;
     const userCollectionRef = collection(db, "users");
     const userDocRef = doc(userCollectionRef, Id);
     const nestedCollectionRef = collection(
@@ -312,13 +324,13 @@ let documentId = auth.currentUser.uid
       categoryName + "Questions"
     );
     const customDocumentRef = doc(nestedCollectionRef, Id);
-    TimeTaken = 90-time;
-    clearInterval(timer)
-    await setDoc(customDocumentRef,{TimeTaken:TimeTaken},{merge:true});
-    DisplayResult(att, Data);
+    TimeTaken = 90 - time;
+    clearInterval(timer);
+    await setDoc(customDocumentRef, { TimeTaken: TimeTaken }, { merge: true });
+    DisplayResult(att);
   }
 }
-
+let array = [];
 async function addNewCategoryToDocument(
   documentId,
   newCategory,
@@ -326,10 +338,8 @@ async function addNewCategoryToDocument(
   Index,
   CurrentQuestion
 ) {
- 
   try {
-    console.log(newCategory)
-    // Construct the document reference
+    console.log(newCategory);
     const userDocRef = doc(db, "users", documentId);
     const nestedCollectionRef = collection(
       userDocRef,
@@ -349,61 +359,58 @@ async function addNewCategoryToDocument(
     console.log("Custom Document Reference:", currentData);
 
     // Find if the question already exists
-    let foundQIndex = -1;
-    if (currentData.NumberOfAttempts == 1) {
-      if (currentData[categoryName]) {
-        foundQIndex = currentData[categoryName].findIndex(
-          (q) => q.question === newCategory[0].question
-        );
-      }
+    // let foundQIndex = -1;
+    // if (currentData.NumberOfAttempts == 1) {
+    //   if (currentData[categoryName]) {
+    //     foundQIndex = currentData[categoryName].findIndex(
+    //       (q) => q.question === newCategory[0].question
+    //     );
+    //   }
 
-      if (foundQIndex !== -1) {
-        currentData[foundQIndex] = [{ ...newCategory }];
-        await setDoc(
-          customDocumentRef,
-          { [categoryName]: currentData[categoryName] },
-          { merge: true }
-        );
-        console.log("Question updated successfully");
-      } else {
-        if(newCategory[0].attemptmeted== CurrentQuestion.correct_answer){
-         score += 1;
-          }
-     
+    //   if (foundQIndex !== -1) {
+    //     currentData[foundQIndex] = [{ ...newCategory }];
+    //     await setDoc(
+    //       customDocumentRef,
+    //       { [categoryName]: currentData[categoryName] },
+    //       { merge: true }
+    //     );
+    //     console.log("Question updated successfully");
+    //   } 
+        if (newCategory[0].attemptmeted == CurrentQuestion.correct_answer) {
+          score += 1;
+        }
+
+array.push(...newCategory);
+// let newarr = [...array,...newCategory];
+console.log(array)
         const currentCategory = currentData[categoryName] || [];
         const mergedCategory = [...currentCategory, ...newCategory];
+      console.log(mergedCategory)
+         const updatedData = {
+            [categoryName]: array, // Update the category with the merged category
+            score: score // Update the score
+          };
         await setDoc(
           customDocumentRef,
-          { [categoryName]: mergedCategory, score: score},
+           {[categoryName]:array},
           { merge: true }
         );
-        console.log("New category added successfully.");
-      }
-    } else {
-      if(newCategory[0].attemptmeted== CurrentQuestion.correct_answer){
-         score += 1;
-        }
-    console.log("score : " + score);
-    }
+        console.log("Question added successfully.");
+       
+      
   } catch (error) {
     console.error("Error adding new category:", error);
   }
 }
 const buttons = document.querySelectorAll(".a");
 buttons.forEach((button) => {
-  button.addEventListener("click",()=>{
-    GetTag(button)
-    console.log(button)
+  button.addEventListener("click", () => {
+    GetTag(button);
+    console.log(button);
   });
 });
 
-
-
-async function DisplayResult(att, Data) {
-  let check = JSON.stringify(Data.results[0]);
-  
-  
-  console.log("results :" + Data.results);
+async function DisplayResult(att) {
   let Quiz_Container = document.getElementsByClassName("Quiz_Container")[0];
   quiz.innerHTML = "";
   let div = document.createElement("div");
@@ -411,12 +418,11 @@ async function DisplayResult(att, Data) {
   const user = auth.currentUser;
   console.log(user);
   try {
-   
     const userDocRef = doc(db, "users", user.uid);
     const nestedCollectionRef = collection(userDocRef, att + "Questions");
     const customDocumentRef = doc(nestedCollectionRef, user.uid);
-    const docSnapshot = await  getDoc(customDocumentRef);
-   if (docSnapshot.exists()) {
+    const docSnapshot = await getDoc(customDocumentRef);
+    if (docSnapshot.exists()) {
       let data = docSnapshot.data();
       let Questions = data[att];
       Object.values(Questions).map((question, index) => {
@@ -429,7 +435,7 @@ async function DisplayResult(att, Data) {
             <h3><span>${index + 1}.</span>${question.question}</h3>
             <div class="answer_buttons">
               ${
-               question.attemptmeted == question.option4
+                question.attemptmeted == question.option4
                   ? `<button class="option1" id="btn" value="${question.attemptmeted}" style="border:2px solid green;" disabled>${question.attemptmeted}</button>`
                   : `<button class="option1" id="btn" value="${question.attemptmeted}" style="border:2px solid red;">${question.attemptmeted}</button>`
               }   
@@ -452,16 +458,11 @@ async function DisplayResult(att, Data) {
         `;
       });
       console.log(data);
-    
+    }else{
+   quiz.innerHTML = `<h3 style="text-align:center;">No Questions were attempted</h3>`
     }
   } catch (error) {
     console.log(error);
   }
-
-}
-if (performance.navigation.type === 1) {
-  console.log("Page has been refreshed");
-} else {
-  console.log("Page has not been refreshed");
 }
 
