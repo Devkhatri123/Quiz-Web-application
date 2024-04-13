@@ -49,7 +49,7 @@ body{
     max-width: 230px;
     padding: 9px;
     border-radius: 4px;
-    cursor: pointer;
+    cursor:not-allowed;
 }
 h1{
     /* font-size: 2vw; */

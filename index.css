@@ -581,15 +581,16 @@
 } 
   
 #logo{
-    width: 11%;
-    max-width: 300px;
-    min-width: 16%;
+    /* width: 11%; */
+    max-width: 160px;
+    /* min-width: 16%; */
 }
 nav{
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 15px 26px;
+    height: 31px;
 }
 /* ul{
     text-decoration: none;
@@ -607,7 +608,7 @@ li{
     font-weight: 400;
     color: #6d6d6d;
     text-align: center;
-    padding: 18px;
+    padding: 13px;
     clear: both;
 }
 ul{
@@ -685,13 +686,15 @@ h2{
     background-image: url(/images/LINUX.jpg);
  } */
 #a{
-    background-image: url(/images/php.jpeg);
+    background-image: url(/Sport-Blog-Post-min.webp);
+    border: 2px solid black;
+    height: 216px;
  }
 #a1{
     background-image: url(/images/LINUX.jpg);
 }
 #a2{
-    background-image: url(/images/html.jpg);
+    background-image: url(politics.jpeg);
 }
 .a{
     background-position: center;
@@ -781,12 +784,17 @@ li{
     /* margin-top: 10px; */
     background: white;
     /* padding: 11px; */
-    max-width: 200px;
+    max-width: 33%;
     padding: 3px 0px;
     /* width: 110px; */
     position: absolute;
-    right: 4px;
-    top: 52px;
+    right: 0px;
+    top: 53px;
+
+}
+
+i{
+    font-size: 24px;
 
 }
 /* .my_quiz{
@@ -819,8 +827,26 @@ li{
         color: white;
         border: none;
         padding: 0;
+        font-size: clamp(11.8px, 3vw, 18px);
+        
     }
     img{
         z-index: unset;
     }
+}
+@media screen and (max-width:639px){
+    #logo{
+        max-width: 40%;
+    }
+    a{
+        font-size: clamp(8.8px, 3vw, 22px);
+    }
+    .sidebar{
+        display: flex;
+    }
+}
+@media screen and (max-width: 639px){
+.questions_cont {
+    grid-template-columns: repeat(1, 1fr);
+}
 }

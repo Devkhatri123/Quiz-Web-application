@@ -30,7 +30,7 @@ let User = null;
 async function GetUserInformation(){
  
     try{
-      card.innerHTML = "loading...";
+      card.innerHTML = "fetching Data...";
     onAuthStateChanged(auth, async (user) => {
       if(!auth.currentUser)card.innerHTML = "no user";
     const userCollection = collection(db,"users");
@@ -79,6 +79,7 @@ async function GetNestedCollections(DocRef,id){
         <div class="info">
         <h3>Quiz : ${data.Quiz}</h3>
         <p class="No_of_Question">No of Question : ${parseInt(data.NumberofQuestion)}</p>
+        <p class="No_of_Question">Score : ${data.score}</p>
         <div><button>View</button></div>
         </div>
        `

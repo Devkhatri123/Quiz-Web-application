@@ -8,6 +8,9 @@ let emaildisplay = document.getElementsByClassName("emaildisplay")[0];
 let users_options = document.getElementById("users_options");
 let main = document.querySelectorAll(".a");
 let menu = document.getElementById("menu");
+let close = document.getElementById("close");
+let logout = document.getElementsByClassName("logout")[0];
+
 import {
   app,
   db,
@@ -26,6 +29,7 @@ import {
   push,
   onSnapshot,
   update,
+  signOut
 } from "./firebase.js";
 
 import {
@@ -37,17 +41,27 @@ import {
 console.log(db);
 console.log(app);
 console.log(auth);
-
 let score = 0;
 var second = 0;
 var minute = 0;
 var hour = 0;
 let NumberOfAttempts = 0;
 // console.log(database);
-
+  // console.log(user)
+ onAuthStateChanged(auth,(user)=>{
+  if (!user) {
+    logout.style.display="none";
+  }else{
+    logout.style.display="block";
+    logout.addEventListener("click",()=>{
+      signOut(auth);
+      window.location.reload();
+    })
+  }
+})
 async function GetTag(button) {
   try {
-    const user = auth.currentUser;
+   let user = auth.currentUser;
     // console.log(user)
     if (!user) {
       alert("You are not logged in");
@@ -100,7 +114,7 @@ async function GetTag(button) {
   }
 }
 
-var user;
+
 var timer;
 
 // SignUp functionality
@@ -128,6 +142,9 @@ if (login_btn) {
       })
       .catch((error) => {
         console.log(error);
+        let p = document.getElementById("error");
+        p.style.display = "block"
+        p.innerText = error
       });
 
     name.value = "";
@@ -143,15 +160,18 @@ onAuthStateChanged(auth, (user) => {
   if (user && !redirected && listenerInitialized) {
     console.log("User is signed in:", user.email, user.uid);
 
-    if (emaildisplay) emaildisplay.textContent = user.displayName;
+    if (emaildisplay && user){
+       emaildisplay.textContent = user.displayName;
+      emaildisplay.removeAttribute("href");
+    }
     if(menu){
     menu.addEventListener("click", () => {
-      if (users_options.style.display == "none") {
-        users_options.style.display = "flex";
+       users_options.style.display = "flex";
         console.log(users_options);
-      } else users_options.style.display = "none";
+      
+       
     });
-  }
+    }
     redirected = true;
   }
 });
@@ -180,6 +200,8 @@ const myApiKey = "IFzSbBbmq4QpXOxmYllcHYGSi6q4OE06uKSMzTou";
 var NewPos;
 var Temp;
 var time = 90;
+var min = Math.floor((time % 3600) / 60);
+var sec =  Math.floor(time % 60);
 async function GetData() {
   let url = new URLSearchParams(window.location.search);
   let category = url.get("category");
@@ -200,7 +222,7 @@ async function GetData() {
         console.log(Array);
 
         quiz.innerHTML = `
-                <div class="quiz_top">
+       <div class="quiz_top">
                     <h1>${data.results[index].category} Questions</h1>
                     <p>Time Left : <span id="hr">${time}</span></p>
                 </div>
@@ -209,16 +231,16 @@ async function GetData() {
           data.results[index].question
         }</h3>
                     <div class="answer_buttons">
-                        <button class="option1" id="btn" value="${Array[0]}">${
+                        <button class="option1" id="btn" value="${Array[0]}"  disabled="true">${
           Array[0]
         }</button> 
-                        <button class="option1" id="btn" value="${Array[3]}">${
+                        <button class="option1" id="btn" value="${Array[3]}"  disabled="true">${
           Array[3]
         }</button> 
-                        <button class="option1" id="btn" value="${Array[2]}">${
+                        <button class="option1" id="btn" value="${Array[2]}"  disabled="true">${
           Array[2]
         }</button> 
-                        <button class="option1" id="btn" value="${Array[1]}">${
+                        <button class="option1" id="btn" value="${Array[1]}"  disabled="true">${
           Array[1]
         }</button>
                     </div>
@@ -227,24 +249,44 @@ async function GetData() {
                     <p><span>${index + 1}</span> of <span>${
           data.results.length
         }</span> Questions</p>
-                    <button class="next_btn" id="next" value="clicked">Next</button>
+                    <button class="next_btn" id="next" value="clicked"  disabled="true">Next</button>
                 </div>
                 `;
 
         var hr = document.getElementById("hr");
         let btn = document.querySelectorAll("#btn");
-        if (hr) {
-          timer = setInterval(() => {
-            time-=1;
-            hr.innerHTML = time;
-            if(time<=0){
-              console.log("Timesup");
-              DisplayResult(category)
-              clearInterval(timer)
-            }
-          }, 1000);
-        }
+        let Min = document.getElementById("min");
+        // if (hr) {
+        //   timer = setInterval(() => {
+        //     time-=1;
+        //     hr.innerHTML = time;
+        //     if(time<=0){
+        //       console.log("Timesup");
+        //       DisplayResult(category)
+        //       clearInterval(timer)
+        //     }
+        //   }, 1000);
+        // }
         const nextButton = document.getElementById("next");
+        setTimeout(()=>{
+          nextButton.removeAttribute("disabled");
+          nextButton.style.cursor="pointer";
+          if (hr) {
+            timer = setInterval(() => {
+              time-=1;
+            hr.textContent = time
+              if(time<=0){
+                console.log("Timesup");
+                DisplayResult(category)
+                clearInterval(timer)
+              }
+            }, 1000);
+          }
+          for (let i = 0; i < btn.length; i++) {
+            btn[i].removeAttribute("disabled");
+          }
+         // btn.removeAttribute("disabled");
+        },4000)
         var clickedButtonValue;
         btn.forEach((button) => {
           button.addEventListener("click", (event) => {
@@ -357,42 +399,23 @@ async function addNewCategoryToDocument(
 
     const currentData = docSnapshot.data();
     console.log("Custom Document Reference:", currentData);
-
-    // Find if the question already exists
-    // let foundQIndex = -1;
-    // if (currentData.NumberOfAttempts == 1) {
-    //   if (currentData[categoryName]) {
-    //     foundQIndex = currentData[categoryName].findIndex(
-    //       (q) => q.question === newCategory[0].question
-    //     );
-    //   }
-
-    //   if (foundQIndex !== -1) {
-    //     currentData[foundQIndex] = [{ ...newCategory }];
-    //     await setDoc(
-    //       customDocumentRef,
-    //       { [categoryName]: currentData[categoryName] },
-    //       { merge: true }
-    //     );
-    //     console.log("Question updated successfully");
-    //   } 
-        if (newCategory[0].attemptmeted == CurrentQuestion.correct_answer) {
+      if (newCategory[0].attemptmeted == CurrentQuestion.correct_answer) {
           score += 1;
         }
 
 array.push(...newCategory);
 // let newarr = [...array,...newCategory];
 console.log(array)
-        const currentCategory = currentData[categoryName] || [];
-        const mergedCategory = [...currentCategory, ...newCategory];
-      console.log(mergedCategory)
+      //   const currentCategory = currentData[categoryName] || [];
+      //   const mergedCategory = [...currentCategory, ...newCategory];
+      // console.log(mergedCategory)
          const updatedData = {
-            [categoryName]: array, // Update the category with the merged category
+             array, // Update the category with the merged category
             score: score // Update the score
           };
         await setDoc(
           customDocumentRef,
-           {[categoryName]:array},
+           {[categoryName]:array,score: score},
           { merge: true }
         );
         console.log("Question added successfully.");

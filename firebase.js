@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
  import { getFirestore,collection,doc,addDoc,getDoc,getDocs,setDoc,updateDoc,arrayUnion,FieldValue,onSnapshot} from 'https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js';
 // import { getFirestore } from "https://www.gstatic.com/firebasejs/10.10.0/firestore-app.js";
-import {getAuth} from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+import {getAuth,signOut} from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
 import {get,set,push,update} from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js"
 // import {get,set,getDatabase,ref,push,child,update,orderByKey} from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
 const firebaseConfig = {
@@ -19,6 +19,6 @@ export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 // export const database = getDatabase(app)
-export {collection,doc,addDoc,getDoc,getDocs,setDoc,get,updateDoc,arrayUnion,FieldValue,set,push,onSnapshot,update};
+export {collection,doc,addDoc,getDoc,getDocs,setDoc,get,updateDoc,arrayUnion,FieldValue,set,push,onSnapshot,update,signOut};
 // export const firebase = firebase();
 

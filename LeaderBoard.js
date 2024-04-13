@@ -41,9 +41,9 @@ async function GetAllUsersQuizInfo(Value) {
    if(Arra.length>0){
    // console.log(Math.floor(Arra[1].TimeTaken%3600)/60);
      Arra.sort((a, b) => a.TimeTaken - b.TimeTaken);
-     Arra.sort((a, b) => b.score - a.score);
+      Arra.sort((a, b) => b.score - a.score);
    Arra.forEach((val, index) => {
-    let time = 90-val.TimeTaken;
+    let time = val.TimeTaken;
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = Math.floor(time % 60);
      console.log(`${minutes.toString().padStart(2, '0')}:${seconds.toString().padEnd(2, '0')}`)
