@@ -199,6 +199,7 @@ async function getQuizQuestions(category) {
 const myApiKey = "IFzSbBbmq4QpXOxmYllcHYGSi6q4OE06uKSMzTou";
 var NewPos;
 var Temp;
+var Timer
 var time = 90;
 var min = Math.floor((time % 3600) / 60);
 var sec =  Math.floor(time % 60);
@@ -224,7 +225,7 @@ async function GetData() {
         quiz.innerHTML = `
        <div class="quiz_top">
                     <h1>${data.results[index].category} Questions</h1>
-                    <p>Time Left : <span id="hr">${time}</span></p>
+                    <p>Time Left : <span id="min">${min}</span>:<span id="SECOND">${sec}</span></p>
                 </div>
                 <div class="question">
                     <h3><span>${index + 1}.</span>${
@@ -256,6 +257,7 @@ async function GetData() {
         var hr = document.getElementById("hr");
         let btn = document.querySelectorAll("#btn");
         let Min = document.getElementById("min");
+        let SECOND = document.getElementById("SECOND");
         // if (hr) {
         //   timer = setInterval(() => {
         //     time-=1;
@@ -271,17 +273,27 @@ async function GetData() {
         setTimeout(()=>{
           nextButton.removeAttribute("disabled");
           nextButton.style.cursor="pointer";
-          if (hr) {
+         Timer = setInterval(()=>{
+          if(sec==0){
+            min-=1;
+            Min.innerText = min
+            sec=60;
+          }
+          sec-=1;
+          SECOND.innerText = sec;
+          
+        },1000)
+
             timer = setInterval(() => {
               time-=1;
-            hr.textContent = time
+            // hr.textContent = time
               if(time<=0){
                 console.log("Timesup");
                 DisplayResult(category)
                 clearInterval(timer)
               }
             }, 1000);
-          }
+          
           for (let i = 0; i < btn.length; i++) {
             btn[i].removeAttribute("disabled");
           }
@@ -297,6 +309,7 @@ async function GetData() {
           Inc(data.results[index], clickedButtonValue, data);
           console.log(clickedButtonValue);
           clearInterval(timer);
+          clearInterval(Timer)
           console.log(time)
         });
       }
@@ -419,8 +432,6 @@ console.log(array)
           { merge: true }
         );
         console.log("Question added successfully.");
-       
-      
   } catch (error) {
     console.error("Error adding new category:", error);
   }

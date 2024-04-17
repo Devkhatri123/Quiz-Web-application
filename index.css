@@ -638,12 +638,13 @@ p{
 }
 #laptop{
     width: 73%;
-    z-index: 1;
+    /* z-index: 1; */
 }
 .img_cont{
     display: flex;
     justify-content: end;
     padding: 15px 80px 15px 15px;
+    width: 50%;
 }
 #second{
     /* width: 86%; */
