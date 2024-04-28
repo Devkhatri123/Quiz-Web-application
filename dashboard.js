@@ -24,7 +24,6 @@ import {
   } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
   let a = document.getElementById("a");
   let card = document.getElementById("card");
-  console.log(a)
   let data_value = ["Sports","General Knowledge","Politics","History","Entertainment: Music","Animals","Art","Geography"];
 let User = null;
 async function GetUserInformation(){
@@ -51,26 +50,20 @@ async function GetUserInformation(){
 async function GetNestedCollections(DocRef,id){
     const nestedCollectionsData = [];
   let promises =  data_value.map(async(value,index)=>{
-        console.log(value);
         const nestedCollectionQuerySnapshot = collection(DocRef,value+"Questions");
         const nestedCollectionDoc = doc(nestedCollectionQuerySnapshot,id);
         const nestedDoc = await getDoc(nestedCollectionDoc);
         if(nestedDoc.exists()){
-            console.log(nestedDoc.data())
-         nestedCollectionsData.push(nestedDoc.data());
+          nestedCollectionsData.push(nestedDoc.data());
     }
      })
  await Promise.all(promises)
      return nestedCollectionsData.filter(item => item !== undefined);
-     //console.log(Questions)
-    
  }
  function PrintData(Data){
   try{
     if(Data.length>0){
-    console.log(Data)
     Object.values(Data).map((data)=>{
-        console.log(data)
         if(card){
         card.innerHTML +=`  
         <div class="Quizes">

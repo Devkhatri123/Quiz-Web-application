@@ -678,17 +678,31 @@ h2{
     height: 200px;
     width: 100%;
 }
+ #users_options{
+    display: none;
+    flex-direction: column;
+    gap: 0px;
+    /* margin-top: 10px; */
+    background: white;
+    /* padding: 11px; */
+    max-width: 33%;
+    padding: 3px 0px;
+    position: absolute;
+    right: 0px;
+    top: 53px;
+
+} 
 .section_header{
     text-align: center;
     max-width: 70%;
     margin: 70px auto 100px auto;
 }
-/* .PHP_cont{
-    background-image: url(/images/php.jpeg);
+#close{
+    /* display: none; */
+    color: black;
+    padding-left: 16px;
 }
-.LINUX_cont{
-    background-image: url(/images/LINUX.jpg);
- } */
+
 #a{
     background-image: url(/Sport-Blog-Post-min.webp);
     border: 2px solid black;
@@ -709,6 +723,16 @@ h2{
     color: white;
     opacity: 0.8;
     border-radius: 4px;
+}
+a{
+    color: black;
+    border: none;
+    padding: 0;
+    font-size: clamp(11.8px, 3vw, 18px);
+    border-bottom: 1px solid;
+    margin-bottom: 8px;
+    padding: 0 10px;
+
 }
 .icon{
     text-align: center;
@@ -780,22 +804,7 @@ small{
 li{
     text-align: center;
 }
-#users_options{
-    display: none;
-    /* display: flex; */
-    flex-direction: column;
-    gap: 0px;
-    /* margin-top: 10px; */
-    background: white;
-    /* padding: 11px; */
-    max-width: 33%;
-    padding: 3px 0px;
-    /* width: 110px; */
-    position: absolute;
-    right: 0px;
-    top: 53px;
 
-}
 
 i{
     font-size: 24px;
@@ -815,10 +824,8 @@ i{
     padding-top: 1px;
 } */
 @media screen and (min-width : 639px) {
-    #menu{
-        display: none;
-    }
-    #users_options{
+   
+    /* #users_options{
         display: flex;
         flex-direction: row;
         background: none;
@@ -826,14 +833,8 @@ i{
         position: unset;
         max-width: unset;
         gap: 1.5vw;
-    }
-    a{
-        color: white;
-        border: none;
-        padding: 0;
-        font-size: clamp(11.8px, 3vw, 18px);
-        
-    }
+    } */
+   
     img{
         z-index: unset;
     }
@@ -848,6 +849,7 @@ i{
     .sidebar{
         display: flex;
     }
+   
 }
 @media screen and (max-width: 639px){
 .questions_cont {

@@ -11,7 +11,6 @@ let menu = document.getElementById("menu");
 let close = document.getElementById("close");
 let logout = document.getElementsByClassName("logout")[0];
 let my_quiz = document.getElementsByClassName("my_quiz")[0];
-
 import {app,db,auth,collection,doc,getDoc,setDoc,signOut} from "./firebase.js";
 
 import {
@@ -20,34 +19,30 @@ import {
   updateProfile,
 } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
 
-console.log(db);
-console.log(app);
-console.log(auth);
 let score = 0;
 let NumberOfAttempts = 0;
  onAuthStateChanged(auth,(user)=>{
   if (!user) {
     logout.style.display="none";
   }else{
+    if(logout){
     logout.style.display="block";
     logout.addEventListener("click",()=>{
       signOut(auth);
       window.location.reload();
     })
   }
+  }
 })
 async function GetTag(button) {
   try {
    let user = auth.currentUser;
-    // console.log(user)
     if (!user) {
       alert("You are not logged in");
       return;
     }
 
     const confirmAnswer = window.confirm("Are you sure you want to proceed?");
-    console.log(confirmAnswer);
-
     if (confirmAnswer) {
       const att = button.getAttribute("data-value");
       const questions = button.getAttribute("data-questions");
@@ -58,7 +53,7 @@ async function GetTag(button) {
       const customDocumentRef = doc(nestedCollectionRef, user.uid);
 
       const docSnapshot = await getDoc(customDocumentRef);
-      console.log(docSnapshot.exists);
+     
       NumberOfAttempts += 1;
       const data = {
         NumberofQuestion: questions,
@@ -71,11 +66,9 @@ async function GetTag(button) {
 
       if (!docSnapshot.exists()) {
         await setDoc(customDocumentRef, data);
-        console.log("Document successfully written with custom ID");
       }
       let userDocRefData = docSnapshot.data();
       if (docSnapshot.exists()) {
-        console.log(docSnapshot.data());
         let UpdateNumberOfAttempts = userDocRefData.NumberOfAttempts;
         UpdateNumberOfAttempts += 1;
         await setDoc(
@@ -114,7 +107,7 @@ if (login_btn) {
           name: name,
           email: email,
         });
-        console.log(user);
+        
         setTimeout(()=>{
           window.location.href = "index.html";
         },4000)
@@ -131,7 +124,7 @@ if (login_btn) {
   });
 }
 
-let redirected = false;
+
 let listenerInitialized = false;
 onAuthStateChanged(auth, (user) => {
   listenerInitialized = true;
@@ -140,17 +133,21 @@ onAuthStateChanged(auth, (user) => {
        emaildisplay.removeAttribute("href");
     }
     if(menu){
-    menu.addEventListener("click", () => {
-      if(users_options.style.display = "none"){
-        users_options.style.display = "flex"
-       }
-     });
-  }
+      menu.addEventListener("click", () => {
+       
+         users_options.style.display = "flex";
+      })
+    }
+      if(close){
+        close.addEventListener("click",()=>{
+        users_options.style.display = "none";
+        })
+      
+    }
 });
 var index = 0;
 async function getQuizQuestions(category) {
   let num = parseInt(category);
-  console.log(num);
   try {
     const response = await fetch(
       `https://opentdb.com/api.php?amount=10&category=${num}&difficulty=easy&type=multiple`
@@ -167,8 +164,6 @@ async function getQuizQuestions(category) {
     return null;
   }
 }
-
-const myApiKey = "IFzSbBbmq4QpXOxmYllcHYGSi6q4OE06uKSMzTou";
 var NewPos;
 var Timer
 var time = 300;
@@ -177,12 +172,10 @@ var sec =  Math.floor(time % 60);
 async function GetData() {
   let url = new URLSearchParams(window.location.search);
   let category = url.get("category");
-  console.log(category);
   try {
     const data = await getQuizQuestions(category);
     if (data) {
-      console.log("Retrieved questions:", data);
-      if (data.results.length > 0) {
+       if (data.results.length > 0) {
         let Array = [
           data.results[index].correct_answer,
           ...data.results[index].incorrect_answers,
@@ -191,8 +184,6 @@ async function GetData() {
           NewPos = Math.floor(Math.random() * (i + 1));
           [Array[i], Array[NewPos]] = [Array[NewPos], Array[i]];
         }
-        console.log(Array);
-
         quiz.innerHTML = `
        <div class="quiz_top">
                     <h1>${data.results[index].category} Questions</h1>
@@ -265,11 +256,13 @@ async function GetData() {
           });
         });
         nextButton.addEventListener("click", () => {
+          if(clickedButtonValue){
           Inc(data.results[index], clickedButtonValue, data);
-          console.log(clickedButtonValue);
+          }else{
+            alert("chose a option");
+          }
           clearInterval(timer);
           clearInterval(Timer)
-          console.log(time)
         });
       }
     } else {
@@ -282,23 +275,17 @@ async function GetData() {
 let array = [];
 var hr = document.getElementById("hr");
 document.addEventListener("DOMContentLoaded", () => {
-  console.log(hr);
-  GetData();
+ GetData();
 });
 let TimeTaken;
 async function Inc(data, button, Data) {
-  console.log(Data.results.length);
-
   let url = new URLSearchParams(window.location.search);
   let att = url.get("att");
   index++;
-  console.log(att);
   let categoryName = url.get("att");
   onAuthStateChanged(auth, (user) => {
-    console.log(user);
-
-    const userCollectionRef = collection(db, "users");
-    const userDocRef = doc(userCollectionRef, user.uid);
+   const userCollectionRef = collection(db, "users");
+    // const userDocRef = doc(userCollectionRef, user.uid);
 
     let DATA = [
       {
@@ -312,11 +299,8 @@ async function Inc(data, button, Data) {
     ];
     const Data = DATA;
 
-    addNewCategoryToDocument(user.uid, Data, categoryName, index, data);
+    addNewCategoryToDocument(user.uid, Data, categoryName, index, data,button);
   });
-  console.log(data);
-  console.log("button-value : " + button);
-  let documentId = auth.currentUser.uid;
   if (index < Data.results.length) {
     GetData();
   } else {
@@ -331,8 +315,7 @@ async function Inc(data, button, Data) {
     TimeTaken = 300 - time;
     clearInterval(timer);
     await setDoc(customDocumentRef, { TimeTaken: TimeTaken }, { merge: true });
-    DisplayResult(att,array);
-    console.log(array)
+    DisplayResult(att,array,score);
   }
 }
 
@@ -341,10 +324,10 @@ async function addNewCategoryToDocument(
   newCategory,
   categoryName,
   Index,
-  CurrentQuestion
+  CurrentQuestion,
+  button
 ) {
   try {
-    console.log(newCategory);
     const userDocRef = doc(db, "users", documentId);
     const nestedCollectionRef = collection(
       userDocRef,
@@ -361,24 +344,18 @@ async function addNewCategoryToDocument(
     }
 
     const currentData = docSnapshot.data();
-    console.log("Custom Document Reference:", currentData);
-      if (newCategory[0].attemptmeted == CurrentQuestion.correct_answer) {
+     if (newCategory[0].attemptmeted == CurrentQuestion.correct_answer) {
           score += 1;
         }
 
 array.push(...newCategory);
-// let newarr = [...array,...newCategory];
-console.log(array)
-       const updatedData = {
-             array, 
-            score: score,
-          };
-        await setDoc(
+
+      
+         await setDoc(
           customDocumentRef,
            {[categoryName]:array,score: score},
           { merge: true }
         );
-        console.log("Question added successfully.");
   } catch (error) {
     console.error("Error adding new category:", error);
   }
@@ -387,17 +364,15 @@ const buttons = document.querySelectorAll(".a");
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
     GetTag(button);
-    console.log(button);
   });
 });
-
-async function DisplayResult(att,array) {
+let displayed = false;
+async function DisplayResult(att,array,score) {
   let Quiz_Container = document.getElementsByClassName("Quiz_Container")[0];
   quiz.innerHTML = "";
   let div = document.createElement("div");
   div.className = "Quiz";
   const user = auth.currentUser;
-  console.log(user);
   try {
     const userDocRef = doc(db, "users", user.uid);
     const nestedCollectionRef = collection(userDocRef, att + "Questions");
@@ -405,7 +380,7 @@ async function DisplayResult(att,array) {
     const docSnapshot = await getDoc(customDocumentRef);
     if (docSnapshot.exists()) {
       let data = docSnapshot.data();
-      let Questions = data[att];
+      Quiz_Container.innerHTML = `<div class="quiz" id="quiz"><h3 style="text-align:center;">Your  Score is : ${score}</h3></div>`
       array.map((question, index) => {
         Quiz_Container.innerHTML += `
         <div class="quiz" id="quiz">
@@ -438,7 +413,6 @@ async function DisplayResult(att,array) {
         </div>
         `;
       });
-      console.log(data);
     }else{
    quiz.innerHTML = `<h3 style="text-align:center;">No Questions were attempted</h3>`
     }
@@ -446,7 +420,7 @@ async function DisplayResult(att,array) {
     console.log(error);
   }
 }
-
+if(my_quiz){
 my_quiz.addEventListener("click",()=>{
   let user = auth.currentUser;
   if(user){
@@ -455,3 +429,4 @@ my_quiz.addEventListener("click",()=>{
     alert("You are not logged in");
   }
 })
+}

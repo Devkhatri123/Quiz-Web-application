@@ -46,6 +46,7 @@ async function GetAllUsersQuizInfo(Value) {
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = Math.floor(time % 60);
      console.log(`${minutes.toString().padStart(2, '0')}:${seconds.toString().padEnd(2, '0')}`)
+     if(val.score>0){
     html = ` 
   <tbody>
         <tr>
@@ -57,6 +58,7 @@ async function GetAllUsersQuizInfo(Value) {
         </tbody>
       `;
       tbody.innerHTML += html;
+        }
     });
    }else{
     tbody.innerHTML = `<h1 style="text-align: center;

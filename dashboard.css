@@ -12,10 +12,9 @@ nav{
     background: hsl(0, 0%, 15%);
     margin-bottom: 26px;
 }
-/* ul{
-    text-decoration: none;
-    list-style: none;
-} */
+.dashboard{
+    margin-top: 22px;
+}
 li{
     list-style: none;
     color: white;
