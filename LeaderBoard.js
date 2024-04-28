@@ -37,12 +37,11 @@ async function GetAllUsersQuizInfo(Value) {
     let html;
     tbody.innerHTML = `<div id="loader"></div>`;
    await Promise.all(Promises);
-   tbody.innerHTML ="";
    if(Arra.length>0){
-   // console.log(Math.floor(Arra[1].TimeTaken%3600)/60);
-     Arra.sort((a, b) => a.TimeTaken - b.TimeTaken);
+    tbody.innerHTML ="";
+      Arra.sort((a, b) => a.TimeTaken - b.TimeTaken);
       Arra.sort((a, b) => b.score - a.score);
-   Arra.forEach((val, index) => {
+      Arra.forEach((val, index) => {
     let time = val.TimeTaken;
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = Math.floor(time % 60);
@@ -64,7 +63,7 @@ async function GetAllUsersQuizInfo(Value) {
     position: absolute;
     left: 0;
     right: 0;">No data</h1>`;
-    console.log(h1)
+   // console.log(h1)
    }
   } catch (error) {
     console.error(error); 

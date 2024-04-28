@@ -10,27 +10,9 @@ let main = document.querySelectorAll(".a");
 let menu = document.getElementById("menu");
 let close = document.getElementById("close");
 let logout = document.getElementsByClassName("logout")[0];
+let my_quiz = document.getElementsByClassName("my_quiz")[0];
 
-import {
-  app,
-  db,
-  auth,
-  collection,
-  doc,
-  addDoc,
-  getDoc,
-  get,
-  getDocs,
-  setDoc,
-  updateDoc,
-  arrayUnion,
-  FieldValue,
-  set,
-  push,
-  onSnapshot,
-  update,
-  signOut
-} from "./firebase.js";
+import {app,db,auth,collection,doc,getDoc,setDoc,signOut} from "./firebase.js";
 
 import {
   createUserWithEmailAndPassword,
@@ -42,12 +24,7 @@ console.log(db);
 console.log(app);
 console.log(auth);
 let score = 0;
-var second = 0;
-var minute = 0;
-var hour = 0;
 let NumberOfAttempts = 0;
-// console.log(database);
-  // console.log(user)
  onAuthStateChanged(auth,(user)=>{
   if (!user) {
     logout.style.display="none";
@@ -137,8 +114,10 @@ if (login_btn) {
           name: name,
           email: email,
         });
-        // window.location.href = "index.html";
         console.log(user);
+        setTimeout(()=>{
+          window.location.href = "index.html";
+        },4000)
       })
       .catch((error) => {
         console.log(error);
@@ -146,10 +125,9 @@ if (login_btn) {
         p.style.display = "block"
         p.innerText = error
       });
-
-    name.value = "";
-    email.value = "";
-    pass.value = "";
+      name.value = "";
+  email.value = "";
+  pass.value = "";
   });
 }
 
@@ -157,22 +135,16 @@ let redirected = false;
 let listenerInitialized = false;
 onAuthStateChanged(auth, (user) => {
   listenerInitialized = true;
-  if (user && !redirected && listenerInitialized) {
-    console.log("User is signed in:", user.email, user.uid);
-
-    if (emaildisplay && user){
+ if (emaildisplay && user){
        emaildisplay.textContent = user.displayName;
-      emaildisplay.removeAttribute("href");
+       emaildisplay.removeAttribute("href");
     }
     if(menu){
     menu.addEventListener("click", () => {
-       users_options.style.display = "flex";
-        console.log(users_options);
-      
-       
-    });
-    }
-    redirected = true;
+      if(users_options.style.display = "none"){
+        users_options.style.display = "flex"
+       }
+     });
   }
 });
 var index = 0;
@@ -198,9 +170,8 @@ async function getQuizQuestions(category) {
 
 const myApiKey = "IFzSbBbmq4QpXOxmYllcHYGSi6q4OE06uKSMzTou";
 var NewPos;
-var Temp;
 var Timer
-var time = 90;
+var time = 300;
 var min = Math.floor((time % 3600) / 60);
 var sec =  Math.floor(time % 60);
 async function GetData() {
@@ -258,17 +229,7 @@ async function GetData() {
         let btn = document.querySelectorAll("#btn");
         let Min = document.getElementById("min");
         let SECOND = document.getElementById("SECOND");
-        // if (hr) {
-        //   timer = setInterval(() => {
-        //     time-=1;
-        //     hr.innerHTML = time;
-        //     if(time<=0){
-        //       console.log("Timesup");
-        //       DisplayResult(category)
-        //       clearInterval(timer)
-        //     }
-        //   }, 1000);
-        // }
+        
         const nextButton = document.getElementById("next");
         setTimeout(()=>{
           nextButton.removeAttribute("disabled");
@@ -286,8 +247,7 @@ async function GetData() {
 
             timer = setInterval(() => {
               time-=1;
-            // hr.textContent = time
-              if(time<=0){
+            if(time<=0){
                 console.log("Timesup");
                 DisplayResult(category)
                 clearInterval(timer)
@@ -297,7 +257,6 @@ async function GetData() {
           for (let i = 0; i < btn.length; i++) {
             btn[i].removeAttribute("disabled");
           }
-         // btn.removeAttribute("disabled");
         },4000)
         var clickedButtonValue;
         btn.forEach((button) => {
@@ -320,21 +279,11 @@ async function GetData() {
     console.error("Error:", error);
   }
 }
+let array = [];
 var hr = document.getElementById("hr");
 document.addEventListener("DOMContentLoaded", () => {
   console.log(hr);
   GetData();
-  try {
-    //   if(hr){
-    //  timer = setInterval(() => {
-    //   time--;
-    //   hr.innerHTML = time;
-    //  if(time<=0) time=90;
-    // },1000)
-    //  }
-  } catch (err) {
-    console.log(err);
-  }
 });
 let TimeTaken;
 async function Inc(data, button, Data) {
@@ -379,13 +328,14 @@ async function Inc(data, button, Data) {
       categoryName + "Questions"
     );
     const customDocumentRef = doc(nestedCollectionRef, Id);
-    TimeTaken = 90 - time;
+    TimeTaken = 300 - time;
     clearInterval(timer);
     await setDoc(customDocumentRef, { TimeTaken: TimeTaken }, { merge: true });
-    DisplayResult(att);
+    DisplayResult(att,array);
+    console.log(array)
   }
 }
-let array = [];
+
 async function addNewCategoryToDocument(
   documentId,
   newCategory,
@@ -419,12 +369,9 @@ async function addNewCategoryToDocument(
 array.push(...newCategory);
 // let newarr = [...array,...newCategory];
 console.log(array)
-      //   const currentCategory = currentData[categoryName] || [];
-      //   const mergedCategory = [...currentCategory, ...newCategory];
-      // console.log(mergedCategory)
-         const updatedData = {
-             array, // Update the category with the merged category
-            score: score // Update the score
+       const updatedData = {
+             array, 
+            score: score,
           };
         await setDoc(
           customDocumentRef,
@@ -444,7 +391,7 @@ buttons.forEach((button) => {
   });
 });
 
-async function DisplayResult(att) {
+async function DisplayResult(att,array) {
   let Quiz_Container = document.getElementsByClassName("Quiz_Container")[0];
   quiz.innerHTML = "";
   let div = document.createElement("div");
@@ -459,7 +406,7 @@ async function DisplayResult(att) {
     if (docSnapshot.exists()) {
       let data = docSnapshot.data();
       let Questions = data[att];
-      Object.values(Questions).map((question, index) => {
+      array.map((question, index) => {
         Quiz_Container.innerHTML += `
         <div class="quiz" id="quiz">
         <div class="quiz_top">
@@ -500,3 +447,11 @@ async function DisplayResult(att) {
   }
 }
 
+my_quiz.addEventListener("click",()=>{
+  let user = auth.currentUser;
+  if(user){
+    window.location.href = "dashboard.html";
+  }else{
+    alert("You are not logged in");
+  }
+})

@@ -636,6 +636,9 @@ p{
     /* width: 100%; */
     align-items: center;
 }
+.a{
+    height: 226px;
+}
 #laptop{
     width: 73%;
     /* z-index: 1; */
