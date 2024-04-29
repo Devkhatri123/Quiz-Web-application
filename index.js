@@ -253,10 +253,12 @@ async function GetData() {
         btn.forEach((button) => {
           button.addEventListener("click", (event) => {
             clickedButtonValue = event.target.value;
+           
           });
         });
         nextButton.addEventListener("click", () => {
           if(clickedButtonValue){
+            
           Inc(data.results[index], clickedButtonValue, data);
           }else{
             alert("chose a option");
@@ -293,7 +295,7 @@ async function Inc(data, button, Data) {
         option1: data.incorrect_answers[0],
         option2: data.incorrect_answers[1],
         option3: data.incorrect_answers[2],
-        option4: data.correct_answer,
+        correct_answer: data.correct_answer,
         attemptmeted: button,
       },
     ];
@@ -391,22 +393,29 @@ async function DisplayResult(att,array,score) {
             <h3><span>${index + 1}.</span>${question.question}</h3>
             <div class="answer_buttons">
               ${
-                question.attemptmeted == question.option4
-                  ? `<button class="option1" id="btn" value="${question.attemptmeted}" style="border:2px solid green;" disabled>${question.attemptmeted}</button>`
-                  : `<button class="option1" id="btn" value="${question.attemptmeted}" style="border:2px solid red;">${question.attemptmeted}</button>`
+                question.attemptmeted == question.correct_answer
+                  ? `<button class="option1" id="btn" value="${question.attemptmeted}" style="border:2px solid green;" disabled>${question.attemptmeted}</button>
+                  <button class="option1" id="btn" value="${question.option1}">${
+                    question.option1
+                  }</button> 
+                          <button class="option1" id="btn" value="${question.option2}">${
+                    question.option2
+                  }</button> 
+                          <button class="option1" id="btn" value="${question.option3}">${
+                    question.option3
+                  }</button>
+                  `
+                  : `<button class="option1" id="btn" value="${question.attemptmeted}" style="border:2px solid red;">${question.attemptmeted}</button>
+                     <button class="option1" id="btn" value="${question.correct_answer}" style="border:2px solid green;" disabled>${question.correct_answer}</button>
+                  <button class="option1" id="btn" value="${question.option1}">${
+                    question.option1
+                  }</button> 
+                          <button class="option1" id="btn" value="${question.option2}">${
+                    question.option2
+                  }</button> 
+                  `
               }   
-                <button class="option1" id="btn" value="${question.option1}">${
-          question.option1
-        }</button> 
-                <button class="option1" id="btn" value="${question.option2}">${
-          question.option2
-        }</button> 
-                <button class="option1" id="btn" value="${question.option3}">${
-          question.option3
-        }</button>
-                <button class="option1" id="btn" value="${question.option4}">${
-          question.option4
-        }</button>
+                
             </div>
         </div>
         </div>
